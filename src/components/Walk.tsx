@@ -247,11 +247,11 @@ export function Walk() {
     return (
       <div className="card">
         <div className="card-body">
-          {currentQuestion && (
-            <p className="question">{currentQuestion}</p>
-          )}
-          <div className="arrived-divider" />
-          <p className="card-label">what do you carry from this?</p>
+          <p className="question">what do you carry from this?</p>
+          <p className="card-desc" style={{ fontSize: "13px", opacity: 0.6 }}>
+            one thing. a word, a line, a silence named.
+            this is what gets witnessed.
+          </p>
           <textarea
             className="response-input"
             value={carried}
@@ -275,7 +275,6 @@ export function Walk() {
       </div>
     )
   }
-
   // ── carrying — confirm what to witness ──
   if (phase === "carrying") {
     return (
