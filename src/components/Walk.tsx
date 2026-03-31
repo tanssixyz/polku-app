@@ -23,6 +23,10 @@ async function askPolku(messages: Message[]): Promise<string> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
   })
+  if (res.status === 429) {
+    const data = await res.json()
+    throw new Error(data.error ?? "Too many walks. Try again in an hour.")
+  }
   if (!res.ok) throw new Error(`API error ${res.status}`)
   const data = await res.json()
   return data.text as string
@@ -40,6 +44,7 @@ export function Walk() {
   const [loading, setLoading] = useState(false)
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>()
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const { writeContract, isPending } = useWriteContract()
 
@@ -90,7 +95,8 @@ export function Walk() {
       setMessages(openingMessages)
       setCurrentQuestion(clean)
       setTurnCount(1)
-    } catch {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong")
       setPhase("idle")
     } finally {
       setLoading(false)
@@ -127,8 +133,9 @@ export function Walk() {
       if (hasArrived) {
         setPhase("arrived")
       }
-    } catch {
-      setLoading(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong")
+      setPhase("idle")
     } finally {
       setLoading(false)
     }
@@ -184,6 +191,9 @@ export function Walk() {
             <button className="btn" onClick={beginWalk} disabled={loading}>
               {loading ? "entering..." : "enter the forest"}
             </button>
+          )}
+          {error && (
+            <p className="card-desc" style={{ fontSize: "13px", opacity: 0.6 }}>{error}</p>
           )}
         </div>
       </div>
