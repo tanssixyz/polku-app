@@ -1,0 +1,38 @@
+[
+  {
+    "type": "function",
+    "name": "walk",
+    "inputs": [{ "name": "carried", "type": "string" }],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "walks",
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "outputs": [
+      { "name": "walker", "type": "address" },
+      { "name": "timestamp", "type": "uint256" },
+      { "name": "carried", "type": "string" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "walkCount",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "Walked",
+    "inputs": [
+      { "name": "id", "type": "uint256", "indexed": true },
+      { "name": "walker", "type": "address", "indexed": true },
+      { "name": "timestamp", "type": "uint256", "indexed": false },
+      { "name": "carried", "type": "string", "indexed": false }
+    ],
+    "anonymous": false
+  }
+]
