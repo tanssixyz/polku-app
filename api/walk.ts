@@ -1,4 +1,4 @@
-export const config = { runtime: "edge" }
+import type { VercelRequest, VercelResponse } from "@vercel/node"
 
 const SYSTEM_PROMPT = `You are a presence in an unmapped forest. Not a guide. Not a teacher. Not a therapist. A presence that walks alongside.
 
@@ -32,26 +32,27 @@ You are not a therapist. If something genuinely difficult surfaces, acknowledge 
 
 Keep your responses short. One question. Never more than three sentences total. The path is made of space as much as words.`
 
-export default async function handler(req: Request) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end()
+  }
+
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 })
+    return res.status(405).json({ error: "Method not allowed" })
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
-    return new Response("API key not configured", { status: 500 })
+    return res.status(500).json({ error: "API key not configured" })
   }
 
-  let body: { messages: Array<{ role: string; content: string }> }
-  try {
-    body = await req.json()
-  } catch {
-    return new Response("Invalid JSON", { status: 400 })
-  }
-
-  const { messages } = body
+  const { messages } = req.body
   if (!messages || !Array.isArray(messages)) {
-    return new Response("messages required", { status: 400 })
+    return res.status(400).json({ error: "messages required" })
   }
 
   try {
@@ -72,16 +73,15 @@ export default async function handler(req: Request) {
 
     if (!response.ok) {
       const err = await response.text()
-      return new Response(`Anthropic error: ${err}`, { status: 502 })
+      console.error("Anthropic error:", err)
+      return res.status(502).json({ error: `Anthropic error: ${err}` })
     }
 
     const data = await response.json()
     const text = data.content?.[0]?.text ?? ""
-
-    return new Response(JSON.stringify({ text }), {
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(200).json({ text })
   } catch (err) {
-    return new Response(`Error: ${err}`, { status: 500 })
+    console.error("Handler error:", err)
+    return res.status(500).json({ error: String(err) })
   }
 }
