@@ -1,5 +1,5 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit"
-import { baseSepolia } from "viem/chains"
+import { base } from "viem/chains"
 import { http } from "wagmi"
 
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string
@@ -14,9 +14,9 @@ export const config = getDefaultConfig({
   appUrl: "https://polku.kaarna.xyz",
   appIcon: "https://polku.kaarna.xyz/favicon.svg",
   projectId,
-  chains: [baseSepolia],
+  chains: [base],
   transports: {
-    [baseSepolia.id]: http("https://sepolia.base.org"),
+    [base.id]: http("https://mainnet.base.org"),
   },
   ssr: false,
 })

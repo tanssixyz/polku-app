@@ -37,7 +37,7 @@ export default function App() {
         <About />
         <div className="footer-links">
           <a
-            href="https://sepolia.basescan.org/address/0xc57d270Ab2CeB89844D6E97feA5Abab46a37a34d"
+            href="https://basescan.org/address/0x039352Ec373fbdCEEd96ab864004eF316F53EdD0"
             target="_blank"
             rel="noreferrer"
           >

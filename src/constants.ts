@@ -1,7 +1,7 @@
-import { baseSepolia } from "viem/chains"
+import { base } from "viem/chains"
 
-// Sepolia for now — swap to base mainnet after testing
-export const POLKU_ADDRESS = "0xc57d270Ab2CeB89844D6E97feA5Abab46a37a34d" as const
-export const ACTIVE_CHAIN = baseSepolia
+// Contract address — Base mainnet
+export const POLKU_ADDRESS = "0x039352Ec373fbdCEEd96ab864004eF316F53EdD0" as const
+export const ACTIVE_CHAIN = base
 export const MAX_TURNS = 6
 export const MAX_CARRIED_LENGTH = 280
